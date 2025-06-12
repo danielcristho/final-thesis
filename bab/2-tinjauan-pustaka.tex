@@ -1,47 +1,606 @@
 \chapter{TINJAUAN PUSTAKA}
-\label{chap:tinjauanpustaka}
 
-% Ubah bagian-bagian berikut dengan isi dari tinjauan pustaka
+\renewcommand{\arraystretch}{1.3} % Mengatur jarak antar baris
 
-Demi mendukung penelitian ini, \lipsum[1][1-5]
+% Ubah konten-konten berikut sesuai dengan isi dari tinjauan pustaka
+\section{Hasil penelitian/perancangan terdahulu}
+Dalam melakukan penelitian ini, penulis akan menggunakan beberapa penelitian terdahulu sebagai pedoman dan referensi dalam mengerjakan tugas akhir ini. 
 
-\section{Roket Luar Angkasa}
-\label{sec:roketluarangkasa}
+\subsection{Containerisation for High Performance Computing Systems: Survey and Prospects}
 
-% Contoh input gambar
-\begin{figure}[H]
-  \centering
+Pada artikel ini, peneliti melakukan survei tentang penggunaan \emph{container} dalam sistem \textit{High Performance Computing (HPC)}. Fokus utama adalah bagaimana \emph{container}, seperti Docker, dapat meningkatkan portabilitas, efisiensi, dan isolasi lingkungan di \textit{HPC}. Artikel ini juga mengkaji kelebihan \emph{container} dibandingkan \emph{virtual machine}, termasuk \emph{overhead} yang lebih rendah dan waktu \emph{startup} yang lebih cepat. Survei ini dilakukan dengan mengkaji literatur dari berbagai penelitian terbaru tentang penggunaan container di sistem \textit{HPC}, termasuk studi kasus implementasi \emph{container} dalam klaster GPU dan simulasi berbasis AI.
 
-  % Ubah dengan nama file gambar dan ukuran yang akan digunakan
-  \includegraphics[scale=0.35]{gambar/roketluarangkasa.jpg}
+Hasil survei menunjukkan bahwa \emph{container} memungkinkan \emph{workload} \textit{HPC} dijalankan di berbagai platform dengan efisiensi yang tinggi, menjadikannya solusi populer untuk komputasi terdistribusi. Selain itu, peneliti juga mengidentifikasi tantangan seperti integrasi dengan sistem manajemen klaster dan penjadwalan yang optimal. Kontribusi utama dari artikel ini adalah menyajikan analisis perbandingan yang mendalam antara \emph{container} dan \emph{virtual machine} dalam konteks \textit{HPC}, serta menyarankan pendekatan penjadwalan yang lebih optimal untuk container di lingkungan \emph{multi-user}.
 
-  % Ubah dengan keterangan gambar yang diinginkan
-  \caption{Peluncuran roket luar angkasa \emph{Discovery} \parencite{roketluarangkasa}.}
-  \label{fig:roketluarangkasa}
+Temuan ini relevan dengan penelitian ini, terutama dalam konteks penggunaan Docker untuk mengelola pengguna pada klaster GPU terdistribusi. Konsep efisiensi yang diangkat dalam artikel ini memberikan dasar teoritis untuk pengembangan mekanisme penjadwalan GPU yang akan digunakan dalam penelitian ini, terutama dalam hal mengurangi \emph{overhead} dan memastikan alokasi sumber daya yang adil. Selain itu, contoh aplikasi \emph{container} di sistem \textit{HPC} yang disebutkan dalam artikel ini memberikan inspirasi untuk implementasi praktis dalam pengelolaan lingkungan kerja berbasis \emph{container} (\cite{zhou2022containerisation}).
+
+\subsection{An accessible infrastructure for artificial intelligence using a Docker-based JupyterLab in Galaxy}
+
+Pada artikel ini, peneliti mengembangkan infrastruktur yang dapat diakses untuk kecerdasan buatan dengan memanfaatkan JupyterLab berbasis Docker di dalam platform \textit{Galaxy}. Infrastruktur ini dirancang untuk mempermudah pengguna dalam mengakses alat komputasi AI melalui antarmuka berbasis web.
+
+Hasilnya menunjukkan bahwa pendekatan ini meningkatkan portabilitas dan aksesibilitas bagi pengguna. Penggunaan \emph{container} Docker memungkinkan pengelolaan lingkungan komputasi yang konsisten dan meminimalkan konfigurasi manual. Artikel ini juga menyoroti manfaat JupyterLab dalam menyediakan antarmuka yang intuitif bagi pengguna. Temuan ini relevan dengan penelitian ini, terutama dalam konteks penggunaan JupyterLab berbasis Docker untuk mengelola sumber daya komputasi GPU. Artikel ini memberikan wawasan tentang bagaimana desain antarmuka berbasis \emph{container} dapat meningkatkan efisiensi dan aksesibilitas sistem (\cite{kumar2023accessible}).
+
+\subsection{Syndeo: Portable Ray Clusters with Secure  Containerization}
+
+Pada paper ini, peneliti memperkenalkan \textit{Syndeo}, sebuah framework untuk mengelola dan mengorkestrasi cluster RAY secara portable menggunakan \textit{container}. Fokus utama dari penelitian ini adalah bagaimana \textit{Syndeo} dapat memanfaatkan kontainerisasi untuk meningkatkan portabilitas, keamanan, dan skalabilitas dalam menjalankan \emph{workload} RAY di berbagai platform cloud, seperti AWS, Azure, dan Google Cloud. Framework ini dirancang untuk mendukung komputasi \emph{throughput} tinggi \emph{multi-node} dan memastikan keamanan dengan membatasi hak istimewa pengguna, sehingga administrator memiliki kontrol penuh atas akses sistem. \textit{Syndeo} juga memungkinkan implementasi\textit{ workflow paralell} Ray pada sistem manajemen klaster seperti \textit{Slurm}, yang sebelumnya tidak didukung secara \textit{native}.
+
+Temuan dalam paper ini relevan dengan penelitian ini, terutama dalam konteks penggunaan Docker dan Ray untuk mengelola sumber daya GPU dalam klaster terdistribusi. \textit{Syndeo} memberikan wawasan tentang pentingnya portabilitas, keamanan, dan orkestrasi yang efisien dalam lingkungan multi-pengguna, yang dapat menjadi inspirasi untuk pengelolaan pengguna dan alokasi sumber daya dalam sistem berbasis Klaster yang digunakan pada penelitian ini (\cite{li2024syndeo}).
+
+\subsection{Ray: A Distributed Framework for Emerging AI Applications}
+
+Dalam paper ini, peneliti memperkenalkan Ray, sebuah framework terdistribusi yang dirancang untuk mendukung aplikasi AI modern, seperti \emph{reinforcement learning} dan \emph{deep learning}. Framework ini menawarkan antarmuka terpadu yang mampu mengekspresikan komputasi berbasis tugas (\textit{task-parallel}) dan aktor \textit{(actor-based)}, didukung oleh mesin eksekusi dinamis tunggal. Ray mengimplementasikan penjadwalan terdistribusi dan penyimpanan yang toleran terhadap kesalahan untuk mengelola status kontrol sistem. Eksperimen yang dilakukan menunjukkan bahwa Ray dapat menskalakan hingga lebih dari 1,8 juta tugas per detik dan memberikan kinerja yang lebih baik dibandingkan sistem khusus lainnya.
+
+Temuan dari paper ini relevan dengan penelitian ini dalam beberapa aspek. Pertama, Ray sebagai framework terdistribusi untuk aplikasi AI sesuai dengan kebutuhan penelitian untuk memanfaatkan teknologi tersebut dalam pengelolaan infrastruktur GPU terdistribusi. Kedua, kemampuan Ray dalam mendukung model komputasi\textit{ task-parallel} dan \textit{actor-based} memberikan fleksibilitas yang diperlukan dalam penjadwalan dan alokasi sumber daya GPU di lingkungan multi-pengguna. Ketiga, fitur penjadwalan terdistribusi dan toleransi kesalahan pada Ray dapat meningkatkan efisiensi dan keandalan sistem yang dikembangkan. Keempat, skalabilitas tinggi Ray, yang mampu menangani jutaan tugas per detik, relevan untuk mendukung penggunaan GPU oleh banyak pengguna secara simultan (\cite{moritz2018ray}).
+
+\newpage
+
+\section{Teori/Konsep Dasar}
+
+\subsection{Klaster GPU}
+
+Klaster GPU adalah kumpulan unit pemrosesan grafis (GPU) yang terhubung dalam satu sistem untuk mendukung komputasi paralel intensif. Klaster ini sering digunakan untuk mempercepat pemrosesan aplikasi dengan kebutuhan komputasi tinggi, seperti pelatihan model \textit{deep learning} dan simulasi ilmiah. Efisiensi komputasi dicapai dengan membagi beban kerja antar GPU secara terdistribusi. Setiap GPU bekerja secara paralel untuk menyelesaikan bagian tertentu dari tugas besar, memungkinkan pengurangan waktu pemrosesan dan penggunaan sumber daya secara optimal. Manajemen sumber daya yang baik diperlukan agar alokasi beban kerja berjalan efisien dan terkoordinasi. (\cite{wang2024distributedhpc}).
+
+\subsection{Docker}
+% % Contoh input gambar dengan format *.jpg
+% \begin{figure} [H] \centering
+%     % Nama dari file gambar yang diinputkan
+%     \includegraphics[scale=0.2]{gambar/docker-mark-blue.png}
+%     % Keterangan gambar yang diinputkan
+%     \caption{Logo Docker (Sumber: \url{https://docker.com})}
+%     % Label referensi dari gambar yang diinputkan
+%     \label{fig:Kubernetes}
+% \end{figure}
+
+\justifying Docker merupakan \emph{tool open-source} yang mengotomatisasi proses penyebaran aplikasi ke dalam wadah (\emph{container}). Docker dikembangkan oleh tim di Docker, Inc (sebelumnya dikenal sebagai dotCloud Inc), salah satu pelopor di pasar \emph{Platform-as-a-Service atau (PAAS)}, dan dirilis di bawah lisensi Apache 2.0. Apa yang membuat Docker istimewa? Docker menyediakan platform untuk penyebaran aplikasi yang dibangun di atas lingkungan eksekusi \emph{container} yang tervirtualisasi. Teknologi ini dirancang untuk menghadirkan lingkungan yang ringan dan cepat bagi pengembangan serta eksekusi aplikasi, sekaligus menyederhanakan alur kerja distribusi kode—mulai dari perangkat pengembang, lingkungan pengujian, hingga tahap produksi. Dengan kemudahan yang ditawarkannya, Docker memungkinkan pengguna memulai hanya dengan host minimal yang memiliki kernel Linux yang kompatibel dan biner Docker (\cite{turnbull2014docker}).
+
+Docker memiliki beberapa komponen penting, seperti berikut:
+
+\begin{itemize}[noitemsep, topsep=0pt]
+\item Docker Client \\
+Docker Client adalah antarmuka utama yang digunakan oleh pengguna untuk berinteraksi dengan Docker. Melalui Docker Client, pengguna dapat mengirim perintah seperti membangun, mendistribusikan, dan menjalankan \emph{container}. Perintah-perintah ini kemudian diteruskan ke Docker Daemon untuk diproses. Docker Client mendukung penggunaan antarmuka command line (CLI) yang intuitif, sehingga memudahkan pengelolaan infrastruktur container.
+
+\item Docker Daemon \\
+Docker Daemon adalah proses latar belakang yang bertanggung jawab untuk menangani perintah yang diterima dari Docker Client. Fungsinya meliputi pembuatan dan pengelolaan berbagai objek Docker, seperti \emph{images, containers, networks, dan volumes}. Docker Daemon memastikan \emph{container} berjalan dengan stabil dan memonitor aktivitasnya. Ia juga berperan penting dalam komunikasi dengan \emph{registry} untuk \emph{push} atau \emph{pull} Docker images.
+
+\item Docker Container \\
+Docker Container adalah unit eksekusi yang ringan dan mandiri. \emph{Container} ini berisi semua komponen yang diperlukan untuk menjalankan aplikasi, termasuk kode aplikasi, pustaka, dependensi, dan konfigurasi. Karena sifatnya yang terisolasi, \emph{container} memberikan lingkungan konsisten untuk aplikasi, terlepas dari perbedaan konfigurasi sistem di berbagai host.
+
+\item Docker Images \\
+Docker Images adalah \emph{template read-only} yang menjadi dasar untuk membangun Docker Container. Image ini mencakup semua dependensi, pustaka, dan file yang diperlukan untuk menjalankan aplikasi dalam container. Pengguna dapat membuat \emph{images} dari \emph{Dockerfile} atau \emph{pull images} yang sudah ada dari Docker Hub atau \emph{registry} lainnya. \emph{Images} bersifat modular dan dapat di\emph{update} atau digunakan kembali untuk berbagai kebutuhan.
+
+\item Registry \\
+Registry adalah layanan penyimpanan dan distribusi Docker Images. Docker menyediakan \emph{registry} publik seperti Docker Hub, tempat pengguna dapat mengunggah, menyimpan, dan berbagi \emph{images}. Selain itu, pengguna juga dapat mengatur \emph{registry} privat untuk kebutuhan spesifik organisasi. Registry mempermudah pengelolaan \emph{images} dalam pengembangan kolaboratif dan siklus hidup \emph{container}. 
+\end{itemize}
+
+Arsitektur Docker dapat dilihat pada gambar 2.2. Dalam arsitektur ini, Docker Client berfungsi sebagai jembatan antara pengguna dan sistem Docker, di mana setiap perintah yang dikirimkan oleh pengguna akan diteruskan ke Docker Daemon yang berjalan pada sistem Docker Host.
+
+Docker Daemon kemudian akan menjalankan proses yang dibutuhkan, mulai dari menarik \textit{image} \textit{(pull)} dari Docker Registry, membangun \textit{container} dari \textit{image} tersebut, hingga menjalankan dan mengelola siklus hidup \textit{container}. Docker Registry sendiri berperan sebagai tempat penyimpanan dan distribusi Docker Image, baik melalui \textit{registry} publik seperti Docker Hub, maupun \textit{registry }privat yang disiapkan secara internal.
+
+\begin{figure} [H] \centering
+  % Nama dari file gambar yang diinputkan
+  \includegraphics[scale=0.40]{gambar/docker-arch.png}
+  % Keterangan gambar yang diinputkan
+  \caption{Arsitektur Docker (Sumber: \cite{sysdigteam2024docker})}
+  % Label referensi dari gambar yang diinputkan
+  \label{fig:Arsitektur Docker}
 \end{figure}
 
-Roket luar angkasa merupakan \lipsum[1]
+% \begin{figure} [H] \centering
+%   % Nama dari file gambar yang diinputkan
+%   \includegraphics[scale=0.40]{gambar/docker-arch.png}
+%   % Keterangan gambar yang diinputkan
+%   \caption{Arsitektur Docker (Sumber: \cite{sysdigteam2024docker})}
+%   % Label referensi dari gambar yang diinputkan
+%   \label{fig:Arsitektur Docker}
+% \end{figure}
 
-\emph{Discovery}, Gambar \ref{fig:roketluarangkasa}, merupakan \lipsum[2]
+% \subsection{Kubernetes}
 
-\section{Gravitasi}
-\label{sec:gravitasi}
+% % \begin{figure} [H] \centering
+% %     % Nama dari file gambar yang diinputkan
+% %     \includegraphics[scale=0.2]{gambar/Kubernetes_logo_without_workmark.png}
+% %     % Keterangan gambar yang diinputkan
+% %     \caption{Logo Kubernetes (Sumber: \url{https://kubernetes.io})}
+% %     % Label referensi dari gambar yang diinputkan
+% %     \label{fig:Kubernetes}
+% % \end{figure}
 
-Gravitasi merupakan \lipsum[1]
+% Kubernetes adalah teknlogi yang sangat populer di dunia \emph{cloud infrastruktur} medern. Sebuah orkestrator \emph{open source} yang berguna untuk melakukan \emph{deployment} aplikasi di dalam kontainer. Awalnya, Kubernetes di kembangkan oleh Google dari pengalaman mereka selama sepuluh tahun lebih. Google men-\emph{deploy} sistem mereka yang andal dan \emph{scalable} di dalam kontainer melalui API yang berorientasi aplikasi.
 
-\subsection{Hukum Newton}
-\label{subsec:hukumnewton}
+% Sejak dirilis pada tahun 2014, Kubernetes telah menjadi salah satu teknologi \emph{open soruce} yang paling besar dan paling populer di dunia setelah sistem operasi Linux. Kubernetes API telah menjadi standar industri untuk membangun aplikasi yang bersifat \emph{cloud-native} (mengandalkan kelebihan teknologi \emph{cloud computing} atau komputasi awan), yang tersedia hampir di setiap penyedia layanan \emph{cloud} yang ada.
 
-Newton \parencite{newton1687} pernah merumuskan bahwa \lipsum[1]
-Kemudian menjadi persamaan seperti pada persamaan \ref{eq:hukumpertamanewton}.
+% Klaster Kubernertes terdiri dari sekumpulan mesin pekerja atau \emph{worker node} yang menjalankan aplikasi dalam kontainer. Setiap klaster paling tidak memiliki satu \emph{worker node}. Node pekerja menempatkan \emph{Pod} yang merupakan komponen beban kerja dari aplikasi. \emph{Control plane} mengelola \emph{node} pekera dan pod dalam \emph{cluster}. Dalam lingkungan produksi pada umumnya, \emph{control plane} dijalankan di beberapa komputer dan klaster menjalankan benyak \emph{node} pekerja untuk memberikan toleransi kesalahan dan ketersedian tinggi(\cite{kuncoro2023kubernetes}).
 
-% Contoh pembuatan persamaan
-\begin{equation}
-  \label{eq:hukumpertamanewton}
-  \sum \mathbf{F} = 0\; \Leftrightarrow\; \frac{\mathrm{d} \mathbf{v} }{\mathrm{d}t} = 0.
-\end{equation}
+% Salah satu fitur utama Kubernetes adalah \textit{autoscaling}, yang memungkinkan pengguna untuk menyesuaikan jumlah replika aplikasi secara otomatis berdasarkan kebutuhan sumber daya, seperti penggunaan CPU, memori, atau metrik kustom lainnya. Dengan \textit{autoscaling}, Kubernetes dapat meningkatkan atau mengurangi kapasitas aplikasi secara dinamis, memastikan kinerja aplikasi tetap optimal sekaligus menghemat biaya operasional. Kubernetes juga menyediakan fitur penjadwalan (\textit{scheduling}), yang memungkinkan pengguna untuk mengalokasikan beban kerja ke node tertentu dalam klaster. Penjadwalan ini dapat didasarkan pada berbagai kriteria, seperti ketersediaan sumber daya, label \textit{node}, atau afinitas aplikasi. Selain itu, Kubernetes mendukung penjadwalan tugas secara periodik atau berdasarkan kondisi tertentu, memungkinkan pengguna untuk menjalankan aplikasi sesuai dengan kebutuhan spesifik, seperti tugas batch atau tugas yang dipicu oleh peristiwa tertentu. Selain itu, Kubernetes mendukung \textit{load balancing} dan \textit{service discovery}, yang memungkinkan aplikasi menerima lalu lintas dari pengguna tanpa gangguan, bahkan saat replika aplikasi bertambah atau berkurang (\cite{kubernetesteam2024kubernetes}). 
 
-\subsection{Anti Gravitasi}
-\label{subsec:antigravitasi}
+% Kubernetes secara otomatis mendistribusikan lalu lintas antar replika dan menyediakan mekanisme untuk menemukan layanan lain dalam kluster. Dengan berbagai fitur seperti fault tolerance dan self-healing, Kubernetes memastikan aplikasi tetap berjalan meskipun terjadi kegagalan pada node atau container. Misalnya, Kubernetes dapat secara otomatis memulai ulang container yang gagal, mengganti container yang berhenti, atau memindahkan aplikasi ke node lain yang lebih stabil. Gambar 2.4 merupakan komponen penting yang ada pada Kubernetes.
 
-Anti gravitasi merupakan \lipsum[1]
+% \begin{figure} [H] \centering
+%     % Nama dari file gambar yang diinputkan
+%     \includegraphics[scale=0.4]{gambar/arsitektur-kubernetes.png}
+%     % Keterangan gambar yang diinputkan
+%     \caption{Arsitektur Kubernetes (Sumber: \cite{kuncoro2023kubernetes}})
+%     % Label referensi dari gambar yang diinputkan
+%     \label{fig:Arsitektur Kubernetes}
+% \end{figure}
+
+% \subsection{K3S}
+
+% K3s adalah distribusi Kubernetes ringan yang dirancang untuk kebutuhan komputasi edge dan lingkungan resource terbatas. K3s dikembangkan oleh Rancher Labs dan menawarkan instalasi yang sederhana, footprint yang kecil, serta kompatibilitas penuh dengan API Kubernetes standar. Dalam penelitian ini, K3s digunakan untuk mengelola orkestrasi \textit{container} Ray Worker dan JupyterHub, mengingat skalabilitas dan kemudahan deployment yang dibutuhkan dalam lingkungan laboratorium yang terbatas sumber dayanya. K3s memungkinkan \textit{deploy} klaster Kubernetes dengan \textit{overhead} minimum dibandingkan dengan Kubernetes penuh, sehingga mempercepat pengembangan dan pengujian sistem 
+
+\newpage
+
+
+
+\newpage
+
+\subsection{Penjadwalan GPU dengan Ray}
+
+Penjadwalan GPU merupakan komponen penting dalam sistem komputasi terdistribusi, terutama ketika sumber daya GPU terbatas harus dibagi ke banyak pengguna atau tugas. Ray menyediakan mekanisme penjadwalan tugas berbasis sumber daya yang fleksibel dan dinamis untuk mengelola alokasi GPU secara efisien dalam lingkungan multi-pengguna.
+
+\subsection{JupyterLab}
+
+JupyterLab adalah antarmuka pengguna interaktif berbasis web generasi terbaru dari ekosistem Jupyter yang dirancang untuk mendukung eksplorasi dan analisis data secara komprehensif. Sebagai evolusi dari Jupyter Notebook klasik, JupyterLab menyediakan pengalaman pengembangan yang lebih fleksibel dan extensible dengan arsitektur modular yang mendukung workflow data science modern~\citep{JupyterLabTeam2024}.
+
+\paragraph{Arsitektur JupyterLab}
+
+JupyterLab dibangun dengan arsitektur modular yang terdiri dari beberapa komponen utama:
+
+\textbf{1. Application Shell}\\
+Application shell adalah framework utama yang mengelola layout, menu, dan window management. Shell menyediakan:
+\begin{itemize}
+\item Dockable panels yang dapat disesuaikan
+\item Tabbed interface untuk multiple documents
+\item Sidebar untuk navigation dan tools
+\item Command palette untuk quick access
+\item Keyboard shortcuts management
+\end{itemize}
+
+\textbf{2. Document Manager}\\
+Document manager menangani operasi file dan document lifecycle:
+\begin{itemize}
+\item File browser dengan real-time synchronization
+\item Document registry untuk berbagai file types
+\item Auto-save dan version control integration
+\item Context menu dengan action-specific options
+\end{itemize}
+
+\textbf{3. Kernel Management System}\\
+JupyterLab menggunakan kernel-based architecture untuk eksekusi kode:
+\begin{itemize}
+\item Multi-kernel support (Python, R, Julia, Scala, dll)
+\item Kernel lifecycle management (start, stop, restart, interrupt)
+\item Session management untuk multiple notebooks
+\item Real-time kernel status monitoring
+\item Resource usage tracking per kernel
+\end{itemize}
+
+\begin{lstlisting}[language=Python]
+# Contoh interaksi dengan kernel
+import psutil
+import GPUtil
+
+# Monitor system resources
+cpu_usage = psutil.cpu_percent()
+memory_usage = psutil.virtual_memory().percent
+
+# Check GPU availability
+gpus = GPUtil.getGPUs()
+for gpu in gpus:
+    print(f"GPU {gpu.id}: {gpu.name}, Memory: {gpu.memoryUsed}/{gpu.memoryTotal}MB")
+\end{lstlisting}
+
+\paragraph{Extension System dan Plugin Architecture}
+
+JupyterLab memiliki sistem ekstensi yang powerful untuk customization:
+
+\textbf{Extension Types:}
+\begin{itemize}
+\item \textbf{Frontend Extensions}: Menambahkan UI components dan functionality
+\item \textbf{Server Extensions}: Memperluas server-side capabilities
+\item \textbf{Kernel Extensions}: Menambahkan kernel-specific features
+\item \textbf{Theme Extensions}: Customization visual appearance
+\end{itemize}
+
+\textbf{Plugin Ecosystem:}
+\begin{itemize}
+\item \texttt{jupyterlab-git}: Git integration untuk version control
+\item \texttt{jupyterlab-variableInspector}: Variable debugging tools
+\item \texttt{jupyterlab-system-monitor}: Real-time resource monitoring
+\item \texttt{jupyterlab-nvidia-smi}: GPU monitoring dan management
+\item \texttt{jupyterlab-tensorboard}: TensorBoard integration
+\end{itemize}
+
+\paragraph{Multi-Document Interface}
+
+JupyterLab menyediakan integrated development environment dengan dukungan multiple document types:
+
+\begin{itemize}
+\item \textbf{Notebooks}: Interactive computing dengan cells untuk code, markdown, dan output
+\item \textbf{Code Editor}: Syntax highlighting dan IntelliSense untuk berbagai bahasa
+\item \textbf{Terminal}: Integrated terminal dengan full shell access
+\item \textbf{File Viewer}: Preview untuk images, JSON, CSV, dan file types lainnya
+\item \textbf{Data Viewer}: Tabular data exploration dengan sorting dan filtering
+\end{itemize}
+
+\paragraph{Collaborative Features}
+
+JupyterLab mendukung real-time collaboration:
+\begin{itemize}
+\item \textbf{Real-time Document Sharing}: Multiple users dapat edit notebook simultaneously
+\item \textbf{Comment System}: Annotation dan discussion dalam notebooks
+\item \textbf{Version Control}: Git integration untuk collaborative development
+\item \textbf{Workspace Sharing}: Export/import workspace configurations
+\end{itemize}
+
+\paragraph{Kontainerisasi dengan Docker}
+
+JupyterLab dapat dijalankan dalam Docker container untuk isolated environments:
+
+\textbf{Container Benefits:}
+\begin{itemize}
+\item \textbf{Environment Isolation}: Setiap user mendapat environment terpisah
+\item \textbf{Dependency Management}: Pre-configured libraries dan tools
+\item \textbf{Scalability}: Easy deployment dan horizontal scaling
+\item \textbf{Security}: Sandboxed execution environment
+\end{itemize}
+
+\textbf{Docker Configuration Example:}
+\begin{lstlisting}[language=bash]
+# Dockerfile untuk JupyterLab dengan GPU support
+FROM jupyter/tensorflow-notebook:latest
+
+# Install additional packages
+RUN pip install jupyterlab-nvidia-smi \
+                jupyterlab-system-monitor \
+                ray[default] \
+                torch torchvision
+
+# Configure JupyterLab
+RUN jupyter lab build
+
+# Mount volumes untuk persistent storage
+VOLUME ["/home/jovyan/work"]
+
+# Expose JupyterLab port
+EXPOSE 8888
+
+# GPU runtime support
+ENV NVIDIA_VISIBLE_DEVICES all
+ENV NVIDIA_DRIVER_CAPABILITIES compute,utility
+\end{lstlisting}
+
+\paragraph{GPU Computing Support}
+
+JupyterLab menyediakan dukungan komprehensif untuk GPU computing:
+
+\textbf{CUDA Integration:}
+\begin{itemize}
+\item Automatic CUDA device detection
+\item \texttt{CUDA\_VISIBLE\_DEVICES} environment variable management
+\item GPU memory monitoring dan profiling tools
+\item NVIDIA System Management Interface (nvidia-smi) integration
+\end{itemize}
+
+\textbf{Deep Learning Framework Support:}
+\begin{itemize}
+\item \textbf{PyTorch}: Native CUDA support dengan automatic device placement
+\item \textbf{TensorFlow}: GPU acceleration dengan XLA compilation
+\item \textbf{JAX}: Hardware-accelerated computing dengan GPU/TPU support
+\item \textbf{CuPy}: NumPy-compatible library untuk GPU computing
+\end{itemize}
+
+\begin{lstlisting}[language=Python]
+# Contoh GPU usage dalam JupyterLab
+import torch
+import tensorflow as tf
+
+# Check GPU availability
+print(f"PyTorch CUDA available: {torch.cuda.is_available()}")
+print(f"TensorFlow GPU devices: {tf.config.list_physical_devices('GPU')}")
+
+# Monitor GPU memory
+if torch.cuda.is_available():
+    gpu_memory = torch.cuda.get_device_properties(0).total_memory
+    gpu_memory_used = torch.cuda.memory_allocated(0)
+    print(f"GPU Memory: {gpu_memory_used/1e9:.2f}GB / {gpu_memory/1e9:.2f}GB")
+\end{lstlisting}
+
+\paragraph{Resource Monitoring dan Management}
+
+JupyterLab dapat diintegrasikan dengan monitoring tools untuk real-time resource tracking:
+
+\begin{itemize}
+\item \textbf{System Metrics}: CPU, RAM, disk usage monitoring
+\item \textbf{GPU Metrics}: GPU utilization, memory usage, temperature
+\item \textbf{Process Monitoring}: Kernel resource consumption tracking
+\item \textbf{Custom Dashboards}: Extensible monitoring dengan custom widgets
+\end{itemize}
+
+\paragraph{Security Features}
+
+JupyterLab menyediakan berbagai security features untuk multi-user environments:
+
+\begin{itemize}
+\item \textbf{Authentication}: Token-based authentication dengan configurable timeout
+\item \textbf{HTTPS Support}: TLS encryption untuk secure communication
+\item \textbf{Content Security Policy}: Protection against XSS attacks
+\item \textbf{Sandboxing}: Process isolation dalam container environments
+\item \textbf{Access Control}: File system permissions dan user workspace isolation
+\end{itemize}
+
+\paragraph{Performance Optimization}
+
+JupyterLab dapat dioptimasi untuk performance dalam production environments:
+
+\begin{itemize}
+\item \textbf{Kernel Culling}: Automatic cleanup idle kernels untuk resource efficiency
+\item \textbf{Memory Management}: Configurable memory limits per user session
+\item \textbf{Caching}: Browser caching untuk faster loading
+\item \textbf{Lazy Loading}: On-demand loading untuk large notebooks
+\item \textbf{Resource Limits}: CPU dan memory quotas per container
+\end{itemize}
+
+\paragraph{Integration dengan Ray Framework}
+
+Dalam konteks distributed computing, JupyterLab dapat diintegrasikan dengan Ray:
+
+\begin{lstlisting}[language=Python]
+import ray
+import time
+
+# Initialize Ray cluster connection
+ray.init(address='ray://head-node:10001')
+
+# Distributed computing example
+@ray.remote(num_gpus=1)
+def gpu_compute_task(data):
+    # GPU-accelerated computation
+    import torch
+    device = torch.device('cuda')
+    tensor = torch.tensor(data).to(device)
+    result = torch.matmul(tensor, tensor.T)
+    return result.cpu().numpy()
+
+# Submit tasks to Ray cluster
+futures = [gpu_compute_task.remote(data) for data in dataset]
+results = ray.get(futures)
+\end{lstlisting}
+
+\paragraph{Relevansi dengan Tugas Akhir}
+
+Dalam konteks tugas akhir "Pengelolaan Penggunaan Infrastruktur GPU untuk Pengguna Berbasis Docker Container Menggunakan JupyterLab", JupyterLab berperan sebagai:
+
+\begin{itemize}
+\item \textbf{User Interface Layer}: Menyediakan web-based interface untuk akses GPU resources
+\item \textbf{Development Environment}: Integrated environment untuk GPU computing dan ML development
+\item \textbf{Resource Visualization}: Real-time monitoring GPU usage dan cluster status
+\item \textbf{Collaboration Platform}: Multi-user workspace untuk shared research projects
+\item \textbf{Integration Hub}: Central point untuk connecting dengan Ray distributed computing
+\item \textbf{Container Runtime}: Standardized environment untuk reproducible computing
+\end{itemize}
+
+Dengan fitur-fitur komprehensif ini, JupyterLab menjadi foundation yang ideal untuk membangun sistem pengelolaan GPU terdistribusi yang user-friendly, scalable, dan efficient dalam lingkungan multi-pengguna.
+
+
+\subsection{JupyterHub}
+
+JupyterHub adalah platform open-source yang memungkinkan banyak pengguna untuk mengakses dan menjalankan lingkungan Jupyter Notebook secara terisolasi melalui antarmuka web. Dirancang untuk mendukung skenario multi-pengguna, JupyterHub sangat cocok digunakan dalam lingkungan pendidikan, penelitian, dan industri yang memerlukan akses bersama ke sumber daya komputasi.
+
+\paragraph{Arsitektur Utama JupyterHub}\mbox{}\\
+JupyterHub terdiri dari tiga komponen utama yang bekerja secara sinergis:
+
+
+\begin{enumerate}
+\item \textbf{Hub:} Komponen inti yang bertanggung jawab atas manajemen akun pengguna, proses autentikasi, dan koordinasi peluncuran server notebook individu melalui mekanisme yang disebut Spawner.
+\item \textbf{Proxy:} Berfungsi sebagai gerbang utama yang menerima semua permintaan HTTP dari pengguna dan meneruskannya ke Hub atau server notebook pengguna yang sesuai. Secara default, JupyterHub menggunakan configurable-http-proxy yang dibangun di atas node-http-proxy.
+\item \textbf{Single-User Notebook:} Server Jupyter Notebook yang dijalankan secara terpisah untuk setiap pengguna setelah proses autentikasi berhasil. Server ini memungkinkan pengguna untuk menjalankan kode dan berinteraksi dengan lingkungan Jupyter secara pribadi.
+\end{enumerate}
+
+\paragraph{Alur Kerja JupyterHub}\mbox{}\\
+Proses interaksi pengguna dengan JupyterHub dapat dijelaskan sebagai berikut:
+
+\begin{enumerate}
+\item {Akses Awal:} Pengguna mengakses JupyterHub melalui browser web dengan mengunjungi alamat IP atau nama domain yang telah dikonfigurasi.
+\item {Autentikasi:} Data login yang dimasukkan oleh pengguna dikirim ke komponen Authenticator untuk validasi. Jika valid, pengguna akan dikenali dan diizinkan untuk melanjutkan.
+\item {Peluncuran Server Notebook:} Setelah autentikasi berhasil, JupyterHub akan meluncurkan instance server notebook khusus untuk pengguna tersebut menggunakan Spawner.
+\item {Konfigurasi Proxy:} Proxy dikonfigurasi untuk meneruskan permintaan dengan URL tertentu (misalnya, \textbf{/user/[username]}) ke server notebook pengguna yang sesuai.
+\item {Penggunaan Lingkungan Jupyter:} Pengguna diarahkan ke server notebook pribadi mereka, di mana mereka dapat mulai bekerja dengan lingkungan Jupyter seperti biasa.
+\end{enumerate}
+
+\paragraph{Melakukan kustomisasi dan menambah extension}\mbox{}\\
+JupyterHub dirancang dengan fleksibilitas tinggi, memungkinkan kustomisasi melalui dua komponen utama:
+
+\begin{itemize}
+  \item \textbf{Authenticator:} Mengelola proses autentikasi pengguna. JupyterHub mendukung berbagai metode autentikasi, termasuk PAM (Pluggable Authentication Modules), OAuth, LDAP, dan lainnya.
+  
+  \item \textbf{Spawner:} Mengontrol cara peluncuran server notebook untuk setiap pengguna. Beberapa jenis Spawner yang umum digunakan antara lain:
+  \begin{itemize}
+    \item \textbf{LocalProcessSpawner:} Meluncurkan server notebook sebagai proses lokal di mesin yang sama.
+    \item \textbf{DockerSpawner:} Menjalankan server notebook dalam container Docker, memberikan isolasi lingkungan yang lebih baik.
+    \item \textbf{KubeSpawner:} Menggunakan Kubernetes untuk mengelola dan menskalakan server notebook di lingkungan klaster.
+  \end{itemize}
+\end{itemize}
+
+Kemampuan untuk menyesuaikan dan memperluas JupyterHub melalui Authenticator dan Spawner memungkinkan integrasi yang mulus dengan berbagai infrastruktur dan kebutuhan spesifik pengguna.
+
+\subsection{Ray Framework}
+
+Ray merupakan sebuah \textit{framework} \textit{open-source} yang dirancang untuk membangun dan menjalankan aplikasi komputasi paralel dan terdistribusi secara efisien. Framework ini menyediakan abstraksi tingkat tinggi yang memungkinkan pengembang untuk membuat aplikasi yang skalabel dan mudah dijalankan pada klaster komputasi yang terdiri dari banyak node (\cite{moritz2018ray}).
+
+Ray mendukung dua paradigma pemrograman utama:
+
+\textbf{1. Task-based Computing (Stateless)}\\
+Task-based computing memungkinkan pengguna untuk menjalankan fungsi Python secara paralel menggunakan dekorator \texttt{@ray.remote}. Model ini bersifat stateless dan cocok digunakan untuk proses komputasi yang dapat dibagi menjadi unit-unit kecil independen.
+
+\textbf{2. Actor-based Computing (Stateful)}\\
+Paradigma ini memungkinkan pengguna untuk membuat komponen yang mempertahankan state selama siklus hidupnya. Cocok untuk aplikasi dengan shared state atau layanan yang berjalan terus-menerus.
+
+\paragraph{Arsitektur Ray}\mbox{}\\
+Arsitektur Ray terbagi menjadi dua lapisan utama, yaitu \textbf{Application Layer} dan \textbf{System Layer (Backend)}.
+
+\paragraph{Application Layer}\mbox{}\\
+Pada lapisan aplikasi, terdapat beberapa komponen utama:
+
+\begin{itemize}
+\item \textbf{Driver}: Komponen yang memulai eksekusi program Ray dan bertanggung jawab dalam mengatur tasks dan actors.
+\item \textbf{Worker}: Unit eksekusi stateless yang digunakan untuk menjalankan fungsi-fungsi remote.
+\item \textbf{Actor}: Unit eksekusi stateful yang mempertahankan data selama proses berjalan.
+\end{itemize}
+
+\paragraph{System Layer (Backend)}\mbox{}\\
+Lapisan sistem ini mencakup manajemen koordinasi, scheduling, dan penyimpanan objek:
+
+\textbf{1. Object Store}\
+Object Store adalah penyimpanan berbasis memori untuk menyimpan objek hasil eksekusi:
+\begin{itemize}
+\item Mendukung \textit{zero-copy} antar proses
+\item Manajemen memori otomatis
+\item Penyimpanan efisien untuk objek besar
+\end{itemize}
+
+\textbf{2. Raylet (Local Scheduler + Object Manager)}\
+\begin{itemize}
+\item Menangani penjadwalan tasks lokal
+\item Mengelola transfer objek antar node
+\item Berinteraksi dengan Global Control Store (GCS)
+\end{itemize}
+
+\textbf{3. Global Control Store (GCS)}\
+Komponen pusat metadata dan koordinasi antar node:
+\begin{itemize}
+\item Menyimpan metadata objek, status tasks, actors, dan nodes
+\item Menyediakan event logs untuk debugging
+\end{itemize}
+
+\textbf{4. Global Scheduler}\
+Mengatur penjadwalan global saat node lokal tidak memiliki resource yang mencukupi.
+
+\begin{figure} [H] \centering
+  % Nama dari file gambar yang diinputkan
+  \includegraphics[scale=0.5]{gambar/arsitektur-ray.png}
+  % Keterangan gambar yang diinputkan
+  \caption{Komponen \emph{RAY} (Sumber: \cite{moritz2018ray})}
+  % Label referensi dari gambar yang diinputkan
+  \label{fig:Arsitekur RAY}
+\end{figure}
+
+\paragraph{Konsep Resource dalam Ray}
+
+Ray mendefinisikan resource sebagai pasangan key-value dimana key menunjukkan nama resource dan value adalah kuantitas float~\citep{RayResources2024}. Ray memiliki dukungan native untuk CPU, GPU, dan memory resource types yang disebut sebagai pre-defined resources. Selain itu, Ray juga mendukung custom resources untuk kebutuhan spesifik.
+
+Resource dalam Ray bersifat logical dan tidak harus memiliki mapping 1-to-1 dengan resource fisik. Secara default, logical resources dikonfigurasi berdasarkan aturan berikut:
+\begin{itemize}
+\item \textbf{Number of logical CPUs (\texttt{num\_cpus})}: Diset sesuai jumlah CPU fisik pada mesin/container
+\item \textbf{Number of logical GPUs (\texttt{num\_gpus})}: Diset sesuai jumlah GPU fisik pada mesin/container
+\item \textbf{Memory}: Diset sebesar 70\% dari available memory ketika Ray runtime dimulai
+\end{itemize}
+
+\paragraph{Mekanisme Penjadwalan Ray}
+
+Ray menggunakan strategi penjadwalan hierarkis yang terdiri dari Global Scheduler dan Local Scheduler. Untuk setiap task atau actor, Ray akan memilih node berdasarkan faktor-faktor berikut~\parencite{RayScheduling2024}:
+
+\textbf{Status Node:}
+\begin{enumerate}
+\item \textbf{Feasible}: Node memiliki resource yang diperlukan untuk menjalankan task atau actor
+   \begin{itemize}
+   \item \textit{Available}: Node memiliki resource yang diperlukan dan sedang tersedia
+   \item \textit{Unavailable}: Node memiliki resource yang diperlukan tetapi sedang digunakan
+   \end{itemize}
+\item \textbf{Infeasible}: Node tidak memiliki resource yang diperlukan (contoh: CPU-only node tidak feasible untuk GPU task)
+\end{enumerate}
+
+\textbf{Algoritma Penjadwalan:}
+Ray menjadwalkan tasks atau actors ke grup top-k nodes. Node-node diurutkan berdasarkan prioritas:
+\begin{enumerate}
+\item Mengutamakan node yang sudah memiliki tasks atau actors terjadwal (untuk locality)
+\item Mengutamakan node dengan resource utilization rendah (untuk load balancing)
+\item Dalam grup top-k, node dipilih secara random untuk meningkatkan load-balancing
+\end{enumerate}
+
+Nilai k dihitung sebagai maksimum dari:
+\begin{itemize}
+\item (jumlah node dalam cluster × \texttt{RAY\_scheduler\_top\_k\_fraction})
+\item \texttt{RAY\_scheduler\_top\_k\_absolute}
+\end{itemize}
+Secara default, nilai ini adalah 20\% dari total jumlah node.
+
+\paragraph{GPU Resource Requirements}
+
+Ray memungkinkan spesifikasi resource requirements untuk tasks atau actors melalui decorator \texttt{ray.remote()}. Untuk GPU, persyaratan resource yang lebih besar dari 1 harus berupa bilangan bulat. Contoh:
+
+\begin{lstlisting}[language=Python]
+# Task yang membutuhkan 1 GPU
+@ray.remote(num_gpus=1)
+def gpu_task():
+    return "Hello from GPU"
+
+# Actor yang membutuhkan 2 GPU
+@ray.remote(num_gpus=2)
+class GPUActor:
+    def __init__(self):
+        self.device = torch.cuda.current_device()
+\end{lstlisting}
+
+\paragraph{GPU Isolation dan Visibility}
+
+Ray menyediakan GPU isolation dalam bentuk visible devices dengan secara otomatis mengatur environment variable \texttt{CUDA\_VISIBLE\_DEVICES}. Sebagian besar ML frameworks akan menghormati pengaturan ini untuk tujuan GPU assignment~\citep{RayResources2024}.
+
+Penting untuk dicatat bahwa resource requirements tidak memberlakukan batasan pada penggunaan resource fisik aktual. Ray tidak mencegah task \texttt{num\_gpus=1} menggunakan beberapa GPU fisik jika tersedia. Menjadi tanggung jawab pengguna untuk memastikan tasks atau actors tidak menggunakan lebih banyak resource dari yang dispesifikasikan.
+
+\paragraph{Custom Resources untuk GPU Management}
+
+Ray memungkinkan penggunaan custom resources sebagai label untuk menandai nodes dan mencapai label-based affinity scheduling~\citep{RayCustomResources2019}. Contoh penggunaan:
+
+\begin{lstlisting}[language=Python]
+# Menggunakan custom resource sebagai label
+@ray.remote(resources={"gpu_type_v100": 0.001})
+def specialized_gpu_task():
+    return "Running on V100 GPU"
+
+# Menginisialisasi Ray dengan custom resources
+ray.init(resources={"gpu_type_v100": 4, "gpu_type_a100": 2})
+\end{lstlisting}
+
+\paragraph{Fractional GPU Allocation}
+
+Ray mendukung alokasi fractional GPU, memungkinkan multiple workers untuk berbagi CUDA device yang sama. Hal ini berguna untuk memaksimalkan utilization GPU ketika individual tasks tidak memerlukan seluruh GPU:
+
+\begin{lstlisting}[language=Python]
+# Task dengan 0.5 GPU
+@ray.remote(num_gpus=0.5)
+def fractional_gpu_task():
+    return "Sharing GPU resources"
+\end{lstlisting}
+
+\paragraph{Advanced Scheduling Strategies}
+
+Ray menyediakan beberapa scheduling strategies untuk kontrol yang lebih fine-grained:
+
+\begin{enumerate}
+\item \textbf{NodeAffinitySchedulingStrategy}: Memungkinkan task atau actor dijadwalkan ke node spesifik berdasarkan node ID
+\item \textbf{PlacementGroupSchedulingStrategy}: Memungkinkan bundling tasks dan actors dengan resource requirements yang terkait
+\item \textbf{Default Strategy}: Menggunakan algoritma penjadwalan standar Ray
+\end{enumerate}
+
+\paragraph{Memory-Aware Scheduling}
+
+Ray juga mendukung memory-aware scheduling dengan memungkinkan spesifikasi memory requirements:
+
+\begin{lstlisting}[language=Python]
+# Task dengan GPU dan memory requirements
+@ray.remote(num_gpus=1, memory=2*1024*1024*1024)  # 2GB memory
+def gpu_memory_task():
+    return "GPU task with memory requirements"
+\end{lstlisting}
+
+\paragraph{Integration dengan Container dan JupyterHub}
+
+Dalam konteks tugas akhir ini, penjadwalan GPU Ray terintegrasi dengan:
+\begin{itemize}
+\item \textbf{Docker Container}: Setiap container JupyterLab dapat menjadi Ray worker dengan akses GPU yang terisolasi
+\item \textbf{JupyterHub Spawner}: Custom spawner dapat menggunakan informasi dari discovery service untuk memilih node dengan GPU available
+\item \textbf{Multi-Node Cluster}: Ray cluster dapat spawn multiple physical machines dengan GPU resources yang terdistribusi
+\end{itemize}
+
+Dengan mekanisme penjadwalan yang komprehensif ini, Ray mampu mengelola alokasi GPU secara efisien dalam lingkungan multi-pengguna, memastikan resource utilization yang optimal sambil mempertahankan fairness dan isolation antar pengguna.

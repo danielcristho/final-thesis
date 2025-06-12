@@ -1,48 +1,54 @@
 \chapter{PENDAHULUAN}
-\label{chap:pendahuluan}
-
-% Ubah bagian-bagian berikut dengan isi dari pendahuluan
-
-Penelitian ini dilatarbelakangi oleh \lipsum[1][1-5]
 
 \section{Latar Belakang}
-\label{sec:latarbelakang}
 
-Pesatnya perkembangan roket yang merupakan \lipsum[1]
+% Ubah paragraf-paragraf berikut sesuai dengan latar belakang dari tugas akhir
+GPU telah menjadi elemen krusial dalam komputasi modern, dengan penggunaan GPU 
+untuk deep learning workloads meningkat secara eksponensial dalam dekade terakhir. 
+Artikel "Deep Learning Workload Scheduling in GPU Datacenters: A Survey" mengidentifikasi bahwa traditional approaches yang dirancang untuk big data atau  HPC workloads tidak dapat mendukung deep learning workloads untuk fully utilize GPU resources, sehingga memerlukan pendekatan scheduling yang khusus dirancang untuk karakteristik unik dari AI workloads.
 
-\lipsum[2]
+Teknologi seperti Docker Container telah menjadi solusi inovatif untuk meningkatkan efisiensi dalam pengelolaan aplikasi, terutama di lingkungan komputasi modern. Dengan mengisolasi aplikasi dan dependensinya, \emph{container} memungkinkan penyebaran yang cepat dan konsisten. Artikel "\emph{Containerisation for High Performance Computing Systems: Survey and Prospects}" menjelaskan bahwa teknologi kontainerisasi tidak hanya relevan dalam komputasi awan, tetapi juga memiliki potensi besar untuk sistem \emph{High Performance Computing (HPC)}. Dalam konteks \emph{HPC}, kontainer mampu mengemas pustaka yang dioptimalkan untuk perangkat keras tertentu, meskipun tantangan seperti ukuran yang besar dan kebutuhan orkestrasi yang kompleks tetap perlu diatasi. Penggunaan mekanisme orkestrasi yang efisien dapat membantu memaksimalkan pemanfaatan sumber daya GPU dalam lingkungan \emph{HPC} yang terdistribusi.
 
-\section{Permasalahan}
-\label{sec:permasalahan}
+Namun, tantangan seperti ukuran kontainer yang besar dan kebutuhan akan mekanisme orkestrasi yang kompleks tetap perlu diatasi. Artikel ini juga menyoroti bahwa penggunaan teknologi orkestrasi yang efisien, seperti Kubernetes, dapat membantu memaksimalkan pemanfaatan sumber daya GPU dalam lingkungan \textit{HPC} yang terdistribusi, menjadikan kontainerisasi solusi yang menjanjikan untuk pengelolaan sumber daya multi-pengguna (\cite{zhou2022containerisation}).
 
-Dari permasalahan tersebut maka \lipsum[1][1-6]
+Integrasi teknologi kontainer seperti Docker dengan JupyterLab telah membuka peluang baru dalam pengelolaan infrastruktur komputasi berbasis GPU untuk proyek kecerdasan buatan (AI). Artikel "\emph{An accessible infrastructure for artificial intelligence using a Docker-based JupyterLab in Galaxy}" menunjukkan bahwa pendekatan berbasis kontainer ini dapat menyediakan lingkungan komputasi yang terisolasi namun fleksibel, memungkinkan \emph{training model deep learning} yang cepat dan aman melalui akses GPU yang teroptimalkan. Selain itu, JupyterLab yang berjalan di atas Docker mendukung kolaborasi antar peneliti melalui \textit{notebook} interaktif yang mudah diakses. Infrastruktur ini tidak hanya meningkatkan efisiensi penggunaan GPU tetapi juga memungkinkan pengelolaan sumber daya secara lebih adil, sebagaimana diilustrasikan dalam studi kasus pelatihan model untuk analisis gambar dan prediksi struktur protein. Dengan menggunakan pendekatan serupa, penelitian ini bertujuan untuk mengembangkan mekanisme penjadwalan GPU yang efektif dalam lingkungan terdistribusi, guna mendukung kebutuhan komputasi AI modern yang semakin kompleks dan kolaboratif.
 
-\section{Tujuan}
-\label{sec:Tujuan}
+Mekanisme penjadwalan pengguna pada lingkungan GPU terdistribusi menjadi aspek krusial dalam mendukung efisiensi dan keadilan alokasi sumber daya. Dalam konteks ini, JupyterLab menawarkan antarmuka interaktif yang memungkinkan pengguna menjalankan tugas secara bersamaan dengan akses GPU yang terorkestrasi oleh Docker Container. Hal ini relevan dalam skenario penelitian atau pengembangan model AI oleh kami yang memanfaatkan sumber daya GPU secara kolektif. Dengan demikian, penelitian ini bertujuan untuk mengembangkan solusi penjadwalan yang tidak hanya meningkatkan efisiensi, tetapi juga memaksimalkan pengalaman pengguna dalam mengakses sumber daya GPU pada klaster terdistribusi.
 
-Tujuan dari \lipsum[1][1-3] adalah:
+\vspace{2ex}
 
-\begin{enumerate}[nolistsep]
-
-  \item Membuat \lipsum[2][1-3]
-
-  \item \lipsum[3][1-3]
-
+\section{Rumusan Masalah}
+Rumusan masalah yang diangkat dalam tugas akhir ini adalah sebagai berikut:
+\begin{enumerate}
+    \item Bagaimana cara mengelola penggunaan GPU agar dapat digunakan secara adil dan efisien oleh banyak pengguna?
+    \item Bagaimana cara memanfaatkan kontainerisasi untuk mengisolasi lingkungan kerja setiap pengguna dan meningkatkan efisiensi serta skalabilitas?
+    \item Apakah sistem yang diusulkan dapat mengakomodasi kebutuhan penggunaan GPU oleh banyak pengguna secara bersamaan?
+    \item Bagaimana cara mempermudah pengguna dalam mengakses dan memanfaatkan GPU melalui antarmuka yang interaktif?
 \end{enumerate}
 
-\section{Batasan Masalah}
-\label{sec:batasanmasalah}
+\section{Batasan Masalah atau Ruang Lingkup}
+Batasan dalam pengerjaan tugas akhir ini adalah sebagai berikut:
+\begin{enumerate}
+\item Infrastruktur GPU yang digunakan adalah infrastruktur berbasis klaster komputer yang tersedia pada laboratorium atau institusi pendidikan, dengan konfigurasi spesifik seperti \textit{node} berbasis Docker.
+\item Implementasi sistem difokuskan pada integrasi Docker dengan JupyterLab untuk orkestrasi akses GPU.
+\end{enumerate}
 
-Batasan-batasan dari \lipsum[1][1-3] adalah:
+\section{Tujuan}
 
-\begin{enumerate}[nolistsep]
+Tujuan dari pembuatan Tugas Akhir ini adalah sebagai berikut:
+% Ubah paragraf berikut sesuai dengan tujuan penelitian dari tugas akhir
+\begin{enumerate}
+\item Mengembangkan sistem yang mampu meningkatkan efisiensi penggunaan GPU, khususnya dalam konteks lingkungan multi-pengguna.
+\item Menyediakan antarmuka berbasis JupyterLab yang memungkinkan akses GPU dengan mudah, interaktif, dan terintegrasi dengan baik.
+\end{enumerate}
 
-  \item Mempermudah \lipsum[2][1-3]
+\section{Manfaat}
 
-  \item \lipsum[3][1-5]
-
-  \item \lipsum[4][1-5]
-
+% Ubah paragraf berikut sesuai dengan tujuan penelitian dari tugas akhir
+Manfaat dari penelitian ini adalah sebagai berikut:
+\begin{enumerate}
+\item Sistem ini dapat meningkatkan efisiensi pemanfaatan infrastruktur GPU yang terbatas, mendukung penelitian, dan pengembangan berbasis komputasi AI.
+\item Sistem ini memberikan akses GPU yang lebih mudah, terstruktur, dan aman, sehingga mendukung produktivitas dalam pengembangan aplikasi berbasis GPU.
 \end{enumerate}
 
 \section{Sistematika Penulisan}
@@ -54,30 +60,30 @@ Laporan penelitian tugas akhir ini terbagi menjadi \lipsum[1][1-3] yaitu:
 
   \item \textbf{BAB I Pendahuluan}
 
-        Bab ini berisi \lipsum[2][1-5]
+        Bab ini berisi latar belakang penilitian yang menjelaskan pentingnya pengelolaan infrastruktur GPU terdistribusi. rumusan malasah yang dihadapai dalam penggunaaan GPU multi-user, batasan masalah dan ruang lingkup penelitian, tujuan yang ingin dicapai, manfaat penelitian, serta sistematikan penulisan laporan.
 
         \vspace{2ex}
 
   \item \textbf{BAB II Tinjauan Pustaka}
 
-        Bab ini berisi \lipsum[3][1-5]
+        Bab ini berisi tinjauan terhadapa penelitian-penelitian terdahulu yang relevan dengan topik penelitian, teori dan konsep dasar yang meliputi klaster GPU, teknologi Docker, Ray Framework, penjadwalan GPU, JupyterLab, dan JupyterHub. Bab ini menjadi landasan teoritis untuk melakukan pengembangan sistem.
 
         \vspace{2ex}
 
   \item \textbf{BAB III Desain dan Implementasi Sistem}
 
-        Bab ini berisi \lipsum[4][1-5]
+        Bab ini berisi perancangan arsitektur sistem yang mencakup service discovery, integrasi JupyterHub, dan konfigurasi Ray cluster. Selain itu bab ini membahs peraltan apa saja yang digunakan pada saat penelitian serta setiap detail implementasi komponen yang dikembangkan.
 
         \vspace{2ex}
 
   \item \textbf{BAB IV Pengujian dan Analisa}
 
-        Bab ini berisi \lipsum[5][1-5]
+        Bab ini berisi bab ini dirancang untuk memvalidasi fungsionalitas sistem, evaluasi perform dalam berbagai kondisi beban, analisis efisiensi penggunaan resource, serta pembahasan hasil pengujian terdahap tujuan penelitian yang telah ditetapkan
 
         \vspace{2ex}
 
   \item \textbf{BAB V Penutup}
 
-        Bab ini berisi \lipsum[6][1-5]
+        Bab ini berisi kesimpulan dari penelitian yang merangkum pencapaian tujuan penelitian, kontribusi yang diberikan, serta saran untuk pengembangan dan penelitian lebih lanjut yang dapat dilakukan berdasarkan penelitian ini.
 
 \end{enumerate}

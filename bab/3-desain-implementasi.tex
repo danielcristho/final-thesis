@@ -5,37 +5,155 @@
 
 Penelitian ini dilaksanakan sesuai \lipsum[1][1-5]
 
-\section{Deskripsi Sistem}
+\section{Perancangan Arsitektur Sistem}
 \label{sec:deskripsisistem}
 
-Sistem akan dibuat dengan \lipsum[1-2]
+Dalam tahap ini, dilakukan perancangan arsitektur sistem yang mencakup proses penjadwalan pengguna, isolasi lingkungan komputasi, pemilihan node GPU, serta orkestrasi komputasi terdistribusi. Sistem dirancang untuk melayani banyak pengguna secara bersamaan dengan memanfaatkan infrastruktur GPU multi-node dan container Docker yang terintegrasi dengan JupyterHub.
+Perancangan sistem ini mencakup beberapa tahapan utama, yaitu:
 
-\section{Implementasi Alat
-  \label{sec:implementasi alat}}
+\subsection{Service Discovery}
 
-Alat diimplementasikan dengan \lipsum[1]
+Service discovery bertugas sebagai pusat informasi status terkini dari setiap node dalam klaster. Informasi yang dikumpulkan meliputi status CPU, RAM, GPU, dan jumlah container aktif. Data ini dikumpulkan secara periodik oleh agen yang berjalan di setiap node dan dikirim ke Redis melalui REST API Flask. Redis berfungsi sebagai basis data cepat (in-memory) untuk mendukung pengambilan keputusan real-time saat pemilihan node terbaik untuk menjalankan JupyterLab user.
 
-% Contoh pembuatan potongan kode
-\begin{lstlisting}[
-  language=C++,
-  caption={Program halo dunia.},
-  label={lst:halodunia}
-]
-#include <iostream>
+\subsection{JupyterHub}
 
-int main() {
-    std::cout << "Halo Dunia!";
-    return 0;
-}
-\end{lstlisting}
+JupyterHub bertindak sebagai sistem autentikasi dan pengelola sesi pengguna. Setiap pengguna dapat memulai server JupyterLab pribadi yang dijalankan sebagai container terisolasi. Dengan bantuan spawner khusus yang terintegrasi dengan discovery service, JupyterHub akan secara otomatis memilih node dengan resource teringan. Spawner ini juga bertugas melakukan konfigurasi container secara otomatis, termasuk setting IP, port, dan image sesuai kebutuhan pengguna.
 
-\lipsum[2-3]
+\subsection{Ray Cluster}
 
-% Contoh input potongan kode dari file
-\lstinputlisting[
-  language=Python,
-  caption={Program perhitungan bilangan prima.},
-  label={lst:bilanganprima}
-]{program/bilangan-prima.py}
+Ray digunakan untuk mengatur workload komputasi paralel. Dalam perancangannya, setiap container JupyterLab pengguna akan menjalankan Ray Worker secara otomatis dan terhubung ke Ray Head Node. Dengan cara ini, pengguna dapat langsung menggunakan fitur komputasi terdistribusi seperti ray.remote() tanpa konfigurasi manual. Ray menjembatani antar-node agar task berat bisa dijalankan dengan efisien di GPU atau CPU sesuai kapasitas.
 
-\lipsum[4]
+
+\section{Peralatan Pendukung}
+
+Perangkat yang digunakan untuk pengerjaan tugas akhir ini merupakan sebuah
+komputer dengan spesifikasi sebagai berikut.
+
+\begin{table}[H]
+  \centering
+  \caption{Spesifikasi Peralatan Pendukung}
+  \label{tab:peralatan-pendukung}
+  \begin{tabularx}{\textwidth}{|c|X|X|}
+    \hline
+    \textbf{No.} & \textbf{Komponen}                        & \textbf{Spesifikasi}       \\ \hline
+    1            & \multicolumn{2}{l|}{\textbf{Laptop}}                              \\ \hline
+                 & \textit{Brand}                           & Asus                     \\ \hline
+                 & \textit{Processor}                       & AMD Ryzen 3              \\ \hline
+                 & \textit{Operating System}                & Ubuntu 22.04 LTS                 \\ \hline
+                 & \textit{GPU}                             & AMD Radeon vega 3 graphics \\ \hline
+                 & \textit{Memory}                          & 18 GB                      \\ \hline
+                 & \textit{Storage}                         & 512 GB                       \\ \hline
+
+    2            & \multicolumn{2}{l|}{\textbf{Komputer}}                              \\ \hline
+                 & \textit{Brand}                           & Asus                     \\ \hline
+                 & \textit{Processor}                       & 12th Gen Intel i9-12900K \\ \hline
+                 & \textit{Operating System}                & Ubuntu 24.04 LTS                 \\ \hline
+                 & \textit{GPU}                             & NVIDIA GeForce RTX 3080 Ti \\ \hline
+                 & \textit{Memory}                          & 64 GB                      \\ \hline
+                 & \textit{Storage}                         & 723 GB                       \\ \hline
+                 
+    3            & \multicolumn{2}{l|}{\textbf{Virtual Machine 1}}                              \\ \hline
+             & \textit{Brand}                           & Asus                     \\ \hline
+             & \textit{Processor}                       & 12th Gen Intel i9-12900K \\ \hline
+             & \textit{Operating System}                & Ubuntu 24.04 LTS                 \\ \hline
+             & \textit{GPU}                             & NVIDIA GeForce RTX 3080 Ti \\ \hline
+             & \textit{Memory}                          & 64 GB                      \\ \hline
+             & \textit{Storage}                         & 723 GB                       \\ \hline
+ 
+    4            & \multicolumn{2}{l|}{\textbf{Virtual Machine 2}}                              \\ \hline
+         & \textit{Brand}                           & Asus                     \\ \hline
+         & \textit{Processor}                       & 12th Gen Intel i9-12900K \\ \hline
+         & \textit{Operating System}                & Ubuntu 24.04 LTS          \\ \hline
+         & \textit{GPU}                             & NVIDIA GeForce RTX 3080 Ti \\ \hline
+         & \textit{Memory}                          & 64 GB                      \\ \hline
+         & \textit{Storage}                         & 723 GB                       \\ \hline
+
+  \end{tabularx}
+\end{table}
+
+Selain perangkat keras, terdapat juga perangkat lunak pendukung seperti
+berikut.
+
+\begin{table}[H]
+  \centering
+  \caption{Daftar Perangkat Lunak Pendukung}
+  \label{tab:perangkat-lunak}
+  \begin{tabularx}{\textwidth}{|l|c|X|}
+    \hline
+    \textbf{Nama Perangkat Lunak} & \textbf{Versi} & \textbf{Keterangan} \\ \hline
+
+    Docker Engine & 24.x & Digunakan untuk menjalankan container JupyterLab dan Ray Worker secara terisolasi. Memungkinkan lingkungan komputasi tiap pengguna berjalan secara independen dan mudah didistribusikan ke berbagai node. \\ \hline
+
+    Docker Compose & 2.x & Membantu mendefinisikan dan mengatur layanan multi-container (seperti JupyterHub dan Redis) dalam satu berkas konfigurasi. Memudahkan manajemen dan replikasi layanan. \\ \hline
+
+    JupyterHub & 5.3.0 & Menangani autentikasi pengguna serta spawn container JupyterLab ke node terpilih berdasarkan data dari service discovery. \\ \hline
+
+    Ray & 2.46 & Framework komputasi paralel dan terdistribusi. Setiap pengguna dapat langsung menjalankan task terdistribusi secara otomatis dari dalam JupyterLab. \\ \hline
+
+    Redis & 7.0 & Database key-value in-memory yang digunakan untuk menyimpan status sistem (CPU, RAM, GPU) dan log aktivitas pengguna secara real-time. \\ \hline
+
+    Flask & 3.1.0 & Framework web Python yang digunakan untuk membangun service discovery berupa REST API yang menerima dan menyediakan data status node. \\ \hline
+
+    Python & 3.11 & Bahasa pemrograman utama yang digunakan untuk seluruh komponen sistem, seperti konfigurasi JupyterHub, pengembangan REST API, Ray, serta skrip monitoring. \\ \hline
+
+   PostgreSQL & 14 & Bahasa pemrograman utama yang digunakan untuk seluruh komponen sistem, seperti konfigurasi JupyterHub, pengembangan REST API, Ray, serta skrip monitoring. \\ \hline
+  \end{tabularx}
+\end{table}
+
+\section{Implementasi Sistem
+  \label{sec:implementasi sistem}}
+
+Implementasi sistem terdiri dari beberapa komponen utama yang saling terintegrasi, sebagai berikut:
+  
+
+\subsection{Discovery Service}
+
+Discovery service adalah layanan REST API berbasis Flask yang berfungsi sebagai pusat informasi status dari setiap node atau komputer dalam infrastruktur GPU terdistribusi. Layanan ini menerima dan menyimpan data status node seperti penggunaan CPU, RAM, GPU, serta jumlah container aktif ke dalam database Redis.
+
+Setiap node memiliki agen yang berjalan sebagai background service dan secara berkala mengirimkan informasi tersebut ke endpoint /register-node yang disediakan oleh Discovery service. Data ini disimpan di Redis dengan TTL (time-to-live) tertentu untuk memastikan hanya data node yang masih aktif yang digunakan dalam pengambilan keputusan.
+
+Redis dipilih karena kemampuannya dalam menangani penyimpanan key-value secara efisien dan real-time, yang sangat cocok untuk data ephemeral dan sering berubah seperti status sistem.
+Informasi yang dikumpulkan oleh Discovery service akan digunakan oleh JupyterHub untuk memilih node dengan resource paling ringan sebagai tempat spawn container JupyterLab.
+
+% \lstinputlisting[
+%   language=python,
+%   caption={program discovery service.},
+%   label={lst:agent},
+%   captionpos=b
+% ]{program/ds/app.py}
+
+% \lstinputlisting[
+%   language=bash,
+%   caption={Payload.},
+%   label={lst:agent},
+%   captionpos=b
+% ]{program/ds/payload.json}
+
+% \lstinputlisting[
+%   language=bash,
+%   caption={Menjalankan service discovery menggunakan Docker Container.},
+%   label={lst:Dockerfile},
+%   captionpos=b
+% ]{program/ds/Dockerfile.txt}
+
+% \lstinputlisting[
+%   language=python,
+%   caption={Program untuk mendaftakan setiap komputer ke service discovery.},
+%   label={lst:agent},
+%   captionpos=b
+% ]{program/ds/agent.py}
+
+
+% \lstinputlisting[
+%   language=bash,
+%   caption={Environment Variables.},
+%   label={lst:agent},
+%   captionpos=b
+% ]{program/ds/env}
+
+% \lstinputlisting[
+%   language=bash,
+%   caption={Docker Compose Service Discovery.},
+%   label={lst:dockercomposeds},
+%   captionpos=b
+% ]{program/ds/docker-compose.yml}
